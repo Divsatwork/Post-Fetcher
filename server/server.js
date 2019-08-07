@@ -5,12 +5,12 @@ var indexRouter = require('./routes/index');
 var saveRouter = require('./routes/save_post');
 var upvoteRouter = require('./routes/upvote');
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 app.use('/', indexRouter);
 app.use('/save', saveRouter);
 app.use('/upvote', upvoteRouter);
-
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -7,7 +7,7 @@ var post_db_model = require('../models/post');
 
 function save_post(data, callback) {
 
-    var post_entity = new post_db_model({ 'text': data.text, upvotes: 0, creationTime: new Date() });
+    var post_entity = new post_db_model({ 'text': data.body.text, upvotes: 0, creationTime: new Date() });
 
     mongo.connect(url, function (err, db) {
         if (err) throw new Error('Error occurred while saving post details in database');
@@ -25,7 +25,7 @@ function upvote_post(post_data, callback) {
     mongo.connect(url, function (err, db) {
         if (err) throw new Error('Error occurred while fetching post details in database');
         var dbo = db.db(db_name);
-        dbo.collection(collection_name).findOne({ '_id': post_data._id }, function (err, item) {
+        dbo.collection(collection_name).findOne({ '_id': post_data.body._id }, function (err, item) {
             if (err) throw new Error('Couldn\'t fetch the details');
             if (item == null) {
                 callback(false);

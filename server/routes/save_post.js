@@ -8,15 +8,21 @@ router.get('/', function (req, res, err) {
 });
 
 router.post('/', function (req, res, err) {
-    console.log('Saving post with text: ' + req.text);
-    dbService.savePost(req, function (returnValue) {
-        if (returnValue) {
-            res.json({ 'status': true });
-        }
-        else {
-            res.json({ 'status': false });
-        }
-    });
+    console.log('Saving post with text: ' + req.body.text);
+    if (req.body.text == undefined) {
+        res.json({ 'status': false });
+    }
+    else {
+        dbService.savePost(req, function (returnValue) {
+            if (returnValue) {
+                res.json({ 'status': true });
+            }
+            else {
+                res.json({ 'status': false });
+            }
+        });
+    }
+
 });
 
 module.exports = router;
