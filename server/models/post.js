@@ -1,9 +1,10 @@
-class post {
-    constructor(data) {
-        this.upvotes = 0;
-        this.text = data['text'];
-        this.creationTime = data['creationTime'];
-    }
-}
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-module.exports = post;
+let postSchema = new Schema({
+    upvotes: { type: Number, default: 0 },
+    text: { type: String, required: true },
+    creationTime: { type: Date, default: new Date() }
+});
+
+module.exports = mongoose.model('DBPost', postSchema);

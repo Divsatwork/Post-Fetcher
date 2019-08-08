@@ -13,16 +13,8 @@ router.post('/', function (req, res, err) {
         res.json({ 'status': false });
     }
     else {
-        dbService.savePost(req, function (returnValue) {
-            if (returnValue) {
-                res.json({ 'status': true });
-            }
-            else {
-                res.json({ 'status': false });
-            }
-        });
+        dbService.post_create(req, res);
     }
-
 });
 
 module.exports = router;

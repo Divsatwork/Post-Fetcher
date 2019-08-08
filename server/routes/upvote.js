@@ -8,13 +8,8 @@ router.get('/', function (req, res, err) {
 });
 
 router.post('/', function (req, res, err) {
-    console.log('Saving upvote for the post with id: ' + req.body._id);
-    dbService.upvotePost(req, function (returnValue) {
-        if (returnValue)
-            res.json({ 'status': true });
-        else
-            res.json({ 'status': false });
-    })
+    console.log('Saving upvote for the post with id: ' + req.body.id);
+    dbService.upvote_post(req, res);
 });
 
 module.exports = router;

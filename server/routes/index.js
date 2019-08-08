@@ -5,8 +5,7 @@ var dbService = require('../services/dbService');
 
 router.get('/', function (req, res, err) {
     console.log('Received request for home page');
-    var temp = dbService.getPosts;
-    res.send(temp);
+    dbService.get_posts(req, res);
 });
 
 module.exports = router;

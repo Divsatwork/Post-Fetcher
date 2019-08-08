@@ -1,68 +1,39 @@
-var mongo = require('mongodb').MongoClient;
-const url = "mongodb://localhost:27017/";
-const db_name = "jallan";
-const collection_name = "posts";
+const mongoose = require('mongoose');
+const postModel = require('../models/post');
+const MONGO_HOSTNAME = '127.0.0.1';
+const MONGO_PORT = '27017';
+const MONGO_DB = 'jallan';
 
-var post_db_model = require('../models/post');
+const url = `mongodb://${MONGO_HOSTNAME}:${MONGO_PORT}/${MONGO_DB}?authSource=admin`;
 
-function save_post(data, callback) {
-
-    var post_entity = new post_db_model({ 'text': data.body.text, upvotes: 0, creationTime: new Date() });
-
-    mongo.connect(url, function (err, db) {
-        if (err) throw new Error('Error occurred while saving post details in database');
-        var dbo = db.db(db_name);
-        dbo.collection(collection_name).insertOne(post_entity, function (err, res) {
-            if (err) throw new Error('Couldn\'t save the details');
-            console.log('Successfully saved a new post!');
-            db.close();
-            callback(true);
-        });
-    });
-}
-
-function upvote_post(post_data, callback) {
-    mongo.connect(url, function (err, db) {
-        if (err) throw new Error('Error occurred while fetching post details in database');
-        var dbo = db.db(db_name);
-        dbo.collection(collection_name).findOne({ '_id': post_data.body._id }, function (err, item) {
-            if (err) throw new Error('Couldn\'t fetch the details');
-            if (item == null) {
-                callback(false);
-                db.close();
-            }
-            else {
-                item.upvotes += 1;
-                callback(true);
-                db.close();
-            }
-        });
-    });
-    collection.findOne({ mykey: 1 }, function (err, item) { });
-}
-
-function get_posts() {
-    posts = []
-    mongo.connect(url, function (err, db) {
-        if (err) throw new Error('Error with db');
-        var dbo = db.db(db_name);
-        var stream = dbo.collection(collection_name).find().stream();
-        stream.on('data', function (item) {
-            posts.push(item);
-        });
-        stream.on('end', function () {
-            return posts;
-        })
-    })
-    return posts;
-}
+mongoose.connect(url, { useNewUrlParser: true });
+const mongoDB = process.env.MONGODB_URI || url;
+mongoose.connect(mongoDB);
+mongoose.Promise = global.Promise;
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 module.exports = {
-    getPosts: get_posts(),
-    savePost: function (data, callback) {
-        save_post(data, callback);
+    post_create: function (req, res) {
+        let dbPost = new postModel({
+            text: req.body.text
+        });
+
+        dbPost.save(function (err) {
+            if (err) throw new Error('Error while saving post');
+            res.json({ 'status': true });
+        });
     },
-    upvotePost: function (data, callback) {
-        upvote_post(data, callback);
+    get_posts: function (req, res) {
+        postModel.find({}).then(function (posts) {
+            res.send(posts);
+        });
+    },
+    upvote_post: function (req, res) {
+        postModel.findByIdAndUpdate(req.body.id, { $inc: { 'upvotes': 1 } }, { upsert: true }, function (err) {
+            if (err) throw new Error('Can\'t upvote post');
+            // res.json({ 'status': true });
+            res.redirect('/');
+        })
     }
 }
