@@ -1,9 +1,12 @@
 var express = require('express');
 var app = express();
+var cors = require('cors');
 
 var indexRouter = require('./routes/index');
 var saveRouter = require('./routes/save_post');
 var upvoteRouter = require('./routes/upvote');
+
+app.use(cors());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

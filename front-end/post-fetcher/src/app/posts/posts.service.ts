@@ -14,7 +14,11 @@ export class PostsService {
         return this.http.get(this.localAddress);
     }
 
-    savePost(postData: Posts) {
-        return this.http.post(this.localAddress + 'save', postData).subscribe();
+    savePost(value: string) {
+        return this.http.post(this.localAddress + 'save', { "text": value });
+    }
+
+    upvotePost(postData: Posts) {
+        return this.http.post(this.localAddress + 'upvote', postData);
     }
 }
