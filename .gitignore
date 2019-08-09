@@ -1,4 +1,3 @@
 server/node_modules/*
 server/package-lock.json
 front-end/post-fetcher/node_modules/*
-front-end/post-fetcher/ts*
