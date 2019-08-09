@@ -12,9 +12,11 @@ export class AppComponent {
   loading: boolean;
   dataFetched: boolean;
   showError: boolean;
+  showHidden: boolean;
   posts: Posts[] = [];
   constructor(private postService: PostsService
   ) {
+    this.showHidden = false;
     this.loading = true;
     this.postService.getPosts().subscribe((res: Posts[]) => {
       if (res.length !== undefined) {
@@ -43,4 +45,17 @@ export class AppComponent {
     });
   }
 
+  upvotePost(value: string): void {
+    this.loading = true;
+    console.log(value);
+    const source = this.postService.upvotePost(value);
+    source.subscribe((res) => {
+      if (res['status']) {
+        alert('Post upvote done');
+      } else {
+        alert('Error while upvoting post ');
+      }
+      window.location.reload();
+    });
+  }
 }

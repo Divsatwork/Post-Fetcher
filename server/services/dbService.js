@@ -31,9 +31,8 @@ module.exports = {
     },
     upvote_post: function (req, res) {
         postModel.findByIdAndUpdate(req.body.id, { $inc: { 'upvotes': 1 } }, { upsert: true }, function (err) {
-            if (err) throw new Error('Can\'t upvote post');
-            // res.json({ 'status': true });
-            res.redirect('/');
+            if (err) res.json({ 'status': false })
+            else res.json({ 'status': true });
         })
     }
 }

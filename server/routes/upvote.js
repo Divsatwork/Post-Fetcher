@@ -9,7 +9,12 @@ router.get('/', function (req, res, err) {
 
 router.post('/', function (req, res, err) {
     console.log('Saving upvote for the post with id: ' + req.body.id);
-    dbService.upvote_post(req, res);
+    if (req.body.id == undefined) {
+        res.json({ 'status': false });
+    }
+    else {
+        dbService.upvote_post(req, res);
+    }
 });
 
 module.exports = router;

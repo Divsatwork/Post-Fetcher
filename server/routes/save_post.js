@@ -9,7 +9,7 @@ router.get('/', function (req, res, err) {
 
 router.post('/', function (req, res, err) {
     console.log('Saving post with text: ' + req.body.text);
-    if (req.body.text == undefined) {
+    if (req.body.text == undefined || req.body.text == ' ' || req.body.text == '') {
         res.json({ 'status': false });
     }
     else {

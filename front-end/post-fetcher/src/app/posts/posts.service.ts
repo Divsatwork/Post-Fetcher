@@ -18,7 +18,7 @@ export class PostsService {
         return this.http.post(this.localAddress + 'save', { "text": value });
     }
 
-    upvotePost(postData: Posts) {
-        return this.http.post(this.localAddress + 'upvote', postData);
+    upvotePost(id: string) {
+        return this.http.post(this.localAddress + 'upvote', { 'id': id });
     }
 }
