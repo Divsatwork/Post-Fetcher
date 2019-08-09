@@ -4,16 +4,21 @@ Submit a new post:<form #frm="ngForm" method="POST" (ngSubmit)="submitPost(frm.v
 </form>
 <br>
 <div *ngIf="!showError">
-  <div *ngFor="let postItem of posts">
-    <div class="card">
-      <div class="container">
-        <h4><b>Post created on: {{postItem.creationTime}}</b></h4>
-        <h4>Total upvotes: {{postItem.upvotes}}</h4>
-        <p>{{postItem.text}}</p>
-        <button type="button" (click)=upvotePost(postItem._id)>Upvote</button>
+  <div *ngIf="posts.length == 0">
+    No posts yet!
+  </div>
+  <div *nfIf="posts.length != 0">
+    <div *ngFor="let postItem of posts">
+      <div class="card">
+        <div class="container">
+          <h4><b>Post created on: {{postItem.creationTime}}</b></h4>
+          <h4>Total upvotes: {{postItem.upvotes}}</h4>
+          <p>{{postItem.text}}</p>
+          <button type="button" (click)=upvotePost(postItem._id)>Upvote</button>
+        </div>
       </div>
+      <br>
     </div>
-    <br>
   </div>
 </div>
 
